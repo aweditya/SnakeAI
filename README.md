@@ -9,6 +9,7 @@ ___
 ___
 
 ## Assignment 1 - Maze Solver using Value Iteration
+In this assignment, we had to implement a maze solver using Value Iteration. 
 [Link to the Assignment](https://www.cse.iitb.ac.in/~shivaram/teaching/old/cs747-a2020/pa-2/programming-assignment-2.html)
 ___
 
