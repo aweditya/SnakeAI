@@ -1,7 +1,7 @@
 # SnakeAI
 This repository contains the code for my WnCC Summer of Code - 2021 Project.
 
-The goal of the project is to learn Reinforcement Learning by building a RL Model that plays the popular Snake Game. I will be doing small exercises along the way whose source code will also be found in this repository.
+The goal of the project is to learn Reinforcement Learning by building a RL Model that plays the popular Snake Game. I will be doing small exercises along the way whose source code can be found in this repository.
 ___
 
 ## Game Demo
