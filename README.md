@@ -5,18 +5,18 @@ The goal of the project is to learn Reinforcement Learning by building a RL Mode
 ___
 
 ## Game Demo
-I am playing the game. (fairly well if I say so myself)
+I am playing the game. (fairly well if I say so myself)  
 [Link to the Gameplay](https://drive.google.com/drive/folders/1kixSPSeSGwu6KX9O60KJUzhxoQp0nPv8)
 ___
 
 ## Assignment 1 - Maze Solver using Value Iteration
-In this assignment, we had to implement a maze solver using Value Iteration. The program runs quickly on almost all grid sizes except the 10x10 one. I plan on writing an alternative program that uses a dictionary-based approach rather than vectorised matrix computations. I will also add my implementions of Howard's Policy Iteration and Linear Programming.
-[Link to the Assignment](https://www.cse.iitb.ac.in/~shivaram/teaching/old/cs747-a2020/pa-2/programming-assignment-2.html)
+In this assignment, we had to implement a maze solver using Value Iteration. The program runs quickly on almost all grid sizes except the 10x10 one. I plan on writing an alternative program that uses a dictionary-based approach rather than vectorised matrix computations. I will also add my implementions of Howard's Policy Iteration and Linear Programming.  
+[Link to Assignment 1](https://www.cse.iitb.ac.in/~shivaram/teaching/old/cs747-a2020/pa-2/programming-assignment-2.html)
 ___
 ## Assignment 2 - Sutton & Barto's Windy Gridworld using Model-free control
-In this assignment, we solve the Windy Gridworld problem using different Model-free approaches - SARSA(0), Q-Learning, Expected-SARSA, Dyna-Q. I plan on adding an implemention of SARSA(\Lambda) and comparing it with other approaches listed above.  
-[Sutton & Barto](https://www.andrew.cmu.edu/course/10-703/textbook/BartoSutton.pdf)
-[Link to the Assignment](https://www.cse.iitb.ac.in/~shivaram/teaching/old/cs747-a2020/pa-2/programming-assignment-3.html)
+In this assignment, we solve the Windy Gridworld problem using different Model-free approaches - SARSA(0), Q-Learning, Expected-SARSA, Dyna-Q. Dyna-Q proves to be the best, outperforming all the other algorithms while Q-Learning and Expected-SARSA have similar performances. I plan on adding an implemention of SARSA(&lambda;) and comparing it with other approaches listed above.  
+[Sutton & Barto](https://www.andrew.cmu.edu/course/10-703/textbook/BartoSutton.pdf)  
+[Link to the Assignment 2](https://www.cse.iitb.ac.in/~shivaram/teaching/old/cs747-a2020/pa-2/programming-assignment-3.html)
 ___
 
 ## Resources
