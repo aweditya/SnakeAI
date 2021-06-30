@@ -5,11 +5,12 @@ The goal of the project is to learn Reinforcement Learning by building a RL Mode
 ___
 
 ## Game Demo
+The game is being played by me. (no RL involved)
 [Link to the Gameplay](https://drive.google.com/drive/folders/1kixSPSeSGwu6KX9O60KJUzhxoQp0nPv8)
 ___
 
 ## Assignment 1 - Maze Solver using Value Iteration
-In this assignment, we had to implement a maze solver using Value Iteration. 
+In this assignment, we had to implement a maze solver using Value Iteration. The program runs fairly quickly on all grid sizes. I plan on writing an alternative program that uses a dictionary-based approach rather than vectorised matrix computations. I will also my implementions of Howard's Policy Iteration and Linear Programming.
 [Link to the Assignment](https://www.cse.iitb.ac.in/~shivaram/teaching/old/cs747-a2020/pa-2/programming-assignment-2.html)
 ___
 
