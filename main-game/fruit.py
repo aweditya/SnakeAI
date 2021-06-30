@@ -14,7 +14,7 @@ class Fruit:
         self.screen = screen
 
         # load the apple image
-        self.apple = pygame.image.load('Graphics/apple.png').convert_alpha()
+        self.apple = pygame.image.load('graphics/apple.png').convert_alpha()
 
         self.randomize()
 

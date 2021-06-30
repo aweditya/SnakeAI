@@ -26,7 +26,7 @@ class SnakeGame:
         self.clock = pygame.time.Clock()
 
         # load the game font to display the score
-        self.game_font = pygame.font.Font('Font/PoetsenOne-Regular.ttf', 25)
+        self.game_font = pygame.font.Font('font/PoetsenOne-Regular.ttf', 25)
 
         self.snake = Snake(self.screen)
         self.fruit = Fruit(self.screen)
@@ -139,6 +139,7 @@ class SnakeGame:
                 # handle user key events
                 if event.type == pygame.KEYDOWN:
                     self.key_events(event)
+
             # color the screen RGB = (175, 210, 70)
             self.screen.fill(self.settings.screen_color)
             self.draw_elements()

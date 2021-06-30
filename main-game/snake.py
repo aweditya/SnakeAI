@@ -20,39 +20,39 @@ class Snake:
 
         # load all the snake blocks to be displayed later
         self.head_up = pygame.image.load(
-            'Graphics/head_up.png').convert_alpha()
+            'graphics/head_up.png').convert_alpha()
         self.head_down = pygame.image.load(
-            'Graphics/head_down.png').convert_alpha()
+            'graphics/head_down.png').convert_alpha()
         self.head_right = pygame.image.load(
-            'Graphics/head_right.png').convert_alpha()
+            'graphics/head_right.png').convert_alpha()
         self.head_left = pygame.image.load(
-            'Graphics/head_left.png').convert_alpha()
+            'graphics/head_left.png').convert_alpha()
 
         self.tail_up = pygame.image.load(
-            'Graphics/tail_up.png').convert_alpha()
+            'graphics/tail_up.png').convert_alpha()
         self.tail_down = pygame.image.load(
-            'Graphics/tail_down.png').convert_alpha()
+            'graphics/tail_down.png').convert_alpha()
         self.tail_right = pygame.image.load(
-            'Graphics/tail_right.png').convert_alpha()
+            'graphics/tail_right.png').convert_alpha()
         self.tail_left = pygame.image.load(
-            'Graphics/tail_left.png').convert_alpha()
+            'graphics/tail_left.png').convert_alpha()
 
         self.body_vertical = pygame.image.load(
-            'Graphics/body_vertical.png').convert_alpha()
+            'graphics/body_vertical.png').convert_alpha()
         self.body_horizontal = pygame.image.load(
-            'Graphics/body_horizontal.png').convert_alpha()
+            'graphics/body_horizontal.png').convert_alpha()
 
         self.body_tr = pygame.image.load(
-            'Graphics/body_tr.png').convert_alpha()
+            'graphics/body_tr.png').convert_alpha()
         self.body_tl = pygame.image.load(
-            'Graphics/body_tl.png').convert_alpha()
+            'graphics/body_tl.png').convert_alpha()
         self.body_br = pygame.image.load(
-            'Graphics/body_br.png').convert_alpha()
+            'graphics/body_br.png').convert_alpha()
         self.body_bl = pygame.image.load(
-            'Graphics/body_bl.png').convert_alpha()
+            'graphics/body_bl.png').convert_alpha()
 
         # load the sound to be played when the snake gets a reward
-        self.crunch_sound = pygame.mixer.Sound('Sound/crunch.wav')
+        self.crunch_sound = pygame.mixer.Sound('sound/crunch.wav')
 
     # find the direction in which the head is pointing
     def update_head_graphics(self):
@@ -151,4 +151,4 @@ class Snake:
 
     def reset(self):
         self.body = [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
-        self.direction = Vector2(0, 0)
+        self.direction = Vector2(1, 0)
