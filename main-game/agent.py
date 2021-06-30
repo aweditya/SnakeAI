@@ -28,7 +28,7 @@ class Agent:
 		self.actions = 3
 
 		self.snake_game = SnakeGame()
-		self.action_value_function = np.zeros((states, actions))
+		self.action_value_function = np.zeros((self.states, self.actions))
 
 	def get_state(self):
 		bit_0 = self.snake_game.snake.direction.x * (self.snake_game.fruit.position.x - self.snake_game.snake.body[0].x) + self.snake_game.snake.direction.y * (
@@ -90,15 +90,16 @@ class Agent:
 
 	def epsilon_greedy(self, state, epsilon=0.1):
 		if np.random.uniform(low=0.0, high=1.0) < epsilon:
-            action = np.random.randint(0, self.actions)
-        else:
-            action = np.random.choice(np.flatnonzero(self.action_value_function[state, :] == self.action_value_function[state, :].max()))
+			action = np.random.randint(0, self.actions)
+		else:
+			action = np.random.choice(np.flatnonzero(self.action_value_function[state, :] == self.action_value_function[state, :].max()))
 
-        return action
+		return action
 
-    def update_direction(self, action):
-    	if action == 0:
-    		pass
+
+	def update_direction(self, action):
+		if action == 0:
+			pass
 
 		elif action == 1:
 			if self.snake_game.snake.direction.x == 1:
@@ -110,8 +111,8 @@ class Agent:
 			elif self.snake_game.snake.direction.y == 1:
 				self.snake_game.snake.direction = (-1, 0)
 
-			elif self.snake_game.snake.direction.y == -1
-				self.snake_game.snake.direction = (1, 0):
+			elif self.snake_game.snake.direction.y == -1:
+				self.snake_game.snake.direction = (1, 0)
 
 		elif action == 2:
 			if self.snake_game.snake.direction.x == 1:
@@ -123,31 +124,31 @@ class Agent:
 			elif self.snake_game.snake.direction.y == 1:
 				self.snake_game.snake.direction = (1, 0)
 
-			elif self.snake_game.snake.direction.y == -1
+			elif self.snake_game.snake.direction.y == -1:
 				self.snake_game.snake.direction = (-1, 0)
 
 	def check_termination(self):
 		# exit the game if snake goes outside of the screen
-        if not 0 <= self.snake_game.snake.body[0].x < self.snake_game.settings.cell_number:
-            self.snake_game.snake.reset()
-            return True
-        if not 0 <= self.snake_game.snake.body[0].y < self.snake_game.settings.cell_number:
-            self.snake_game.snake.reset()
-            return True
+		if not 0 <= self.snake_game.snake.body[0].x < self.snake_game.settings.cell_number:
+		    self.snake_game.snake.reset()
+		    return True
+		if not 0 <= self.snake_game.snake.body[0].y < self.snake_game.settings.cell_number:
+		    self.snake_game.snake.reset()
+		    return True
 
-        # exit the game check if snake collides with itself
-        for block in self.snake_game.snake.body[1:]:
-            if block == self.snake_game.snake.body[0]:
-                self.snake_game.snake.reset()
-                return True
+		# exit the game check if snake collides with itself
+		for block in self.snake_game.snake.body[1:]:
+			if block == self.snake_game.snake.body[0]:
+				self.snake_game.snake.reset()
+				return True
 
-        return False
+		return False
 
 	def q_learning_episode(self, gamma=1, epsilon=0.1, alpha=0.5):
 		# create a time based user event to move the snake and to check for collisions
-        SCREEN_UPDATE = pygame.USEREVENT
-        # this event is triggered every 150ms
-        pygame.time.set_timer(SCREEN_UPDATE, 150)
+		SCREEN_UPDATE = pygame.USEREVENT
+		# this event is triggered every 150ms
+		pygame.time.set_timer(SCREEN_UPDATE, 150)
 
 		# Reward Scheme
 		# Snake moves towards the fruit : -1
@@ -185,6 +186,15 @@ class Agent:
 
 			if self.check_termination() == True:
 				break
+
+			# color the screen RGB = (175, 210, 70)
+			self.screen.fill(self.settings.screen_color)
+			self.draw_elements()
+
+			# update the screen
+			pygame.display.update()
+
+			self.clock.tick(60)  # set the maximum fps = 60
 
 if __name__ == '__main__':
 	agent = Agent()
