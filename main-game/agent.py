@@ -70,13 +70,13 @@ class Agent:
 			if block.x == block_to_the_left_x and block.y == block_to_the_left_y:
 				bit_6 = 1
 
-		if block_ahead_x == 0 or block_ahead_x == self.snake_game.settings.cell_number - 1:
+		if block_ahead_x == -1 or block_ahead_x == self.snake_game.settings.cell_number:
 			bit_4 = 1
 
-		if block_to_the_right_y == 0 or block_to_the_right_y == self.snake_game.settings.cell_number - 1:
+		if block_to_the_right_y == -1 or block_to_the_right_y == self.snake_game.settings.cell_number:
 			bit_5 = 1
 
-		if block_to_the_left_y == 0 or block_to_the_left_y == self.snake_game.settings.cell_number - 1:
+		if block_to_the_left_y == -1 or block_to_the_left_y == self.snake_game.settings.cell_number:
 			bit_6 = 1	
 
 		return bit_0 + 2 * bit_1 + 4 * bit_2 + 8 * bit_3 + 16 * bit_4 + 32 * bit_5 + 64 * bit_6	
@@ -124,16 +124,13 @@ class Agent:
 	def check_termination(self):
 		# exit the game if snake goes outside of the screen
 		if not 0 <= self.snake_game.snake.body[0].x < self.snake_game.settings.cell_number:
-		    self.snake_game.snake.reset()
 		    return True
 		if not 0 <= self.snake_game.snake.body[0].y < self.snake_game.settings.cell_number:
-		    self.snake_game.snake.reset()
 		    return True
 
 		# exit the game check if snake collides with itself
 		for block in self.snake_game.snake.body[1:]:
 			if block == self.snake_game.snake.body[0]:
-				self.snake_game.snake.reset()
 				return True
 
 		return False
@@ -147,12 +144,12 @@ class Agent:
 		# Reward Scheme
 		# Snake moves towards the fruit : -1
 		# Snake moves away from the fruit : +1
-		# Snake eats the fruit : +10
-		# Snake crashes : -10
+		# Snake eats the fruit : +100
+		# Snake crashes : -100
 		moving_towards_the_fruit_reward = +1
 		moving_away_from_the_fruit_reward = -1
-		eating_the_fruit_reward = +10
-		crashing_reward = -10
+		eating_the_fruit_reward = +100
+		crashing_reward = -100
 
 		while True:
 			current_state = self.get_state()
@@ -189,10 +186,13 @@ class Agent:
 			# update the screen
 			pygame.display.update()
 
-			self.snake_game.clock.tick(60)  # set the maximum fps = 60
+			self.snake_game.clock.tick(10)  # set the maximum fps = 60
+
+		self.snake_game.snake.reset()
 
 if __name__ == '__main__':
 	agent = Agent()
-	episodes = 170
+	episodes = 20
 	for episode in range(episodes):
+		print(episode)
 		agent.q_learning_episode(gamma=1, epsilon=0.1, alpha=0.5)
