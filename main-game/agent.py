@@ -31,17 +31,11 @@ class Agent:
 		self.action_value_function = np.zeros((self.states, self.actions))
 
 	def get_state(self):
-		bit_0 = self.snake_game.snake.direction.x * (self.snake_game.fruit.position.x - self.snake_game.snake.body[0].x) + self.snake_game.snake.direction.y * (
-		    self.snake_game.fruit.position.y - self.snake_game.snake.body[0].y) > 0
+		bit_0 = Vector2.dot(self.snake_game.snake.direction, self.snake_game.fruit.position - self.snake_game.snake.body[0]) > 0
+		bit_1 = Vector2.dot(self.snake_game.snake.direction, self.snake_game.fruit.position - self.snake_game.snake.body[0]) < 0
 
-		bit_1 = self.snake_game.snake.direction.x * (self.snake_game.fruit.position.x - self.snake_game.snake.body[0].x) + self.snake_game.snake.direction.y * (
-		    self.snake_game.fruit.position.y - self.snake_game.snake.body[0].y) < 0
-
-		bit_2 = self.snake_game.snake.direction.x * (self.snake_game.fruit.position.y - self.snake_game.snake.body[0].y) + self.snake_game.snake.direction.y * (
-		    self.snake_game.fruit.position.x - self.snake_game.snake.body[0].x) > 0
-
-		bit_3 = self.snake_game.snake.direction.x * (self.snake_game.fruit.position.y - self.snake_game.snake.body[0].y) + self.snake_game.snake.direction.y * (
-		    self.snake_game.fruit.position.x - self.snake_game.snake.body[0].x) < 0
+		bit_2 = Vector2.cross(self.snake_game.snake.direction, self.snake_game.fruit.position - self.snake_game.snake.body[0]) < 0
+		bit_3 = Vector2.cross(self.snake_game.snake.direction, self.snake_game.fruit.position - self.snake_game.snake.body[0]) > 0
 
 		bit_4 = 0
 		bit_5 = 0
@@ -103,29 +97,29 @@ class Agent:
 
 		elif action == 1:
 			if self.snake_game.snake.direction.x == 1:
-				self.snake_game.snake.direction = (0, 1)
+				self.snake_game.snake.direction = Vector2(0, 1)
 
 			elif self.snake_game.snake.direction.x == -1:
-				self.snake_game.snake.direction = (0, -1)
+				self.snake_game.snake.direction = Vector2(0, -1)
 
 			elif self.snake_game.snake.direction.y == 1:
-				self.snake_game.snake.direction = (-1, 0)
+				self.snake_game.snake.direction = Vector2(-1, 0)
 
 			elif self.snake_game.snake.direction.y == -1:
-				self.snake_game.snake.direction = (1, 0)
+				self.snake_game.snake.direction = Vector2(1, 0)
 
 		elif action == 2:
 			if self.snake_game.snake.direction.x == 1:
-				self.snake_game.snake.direction = (0, -1)
+				self.snake_game.snake.direction = Vector2(0, -1)
 
 			elif self.snake_game.snake.direction.x == -1:
-				self.snake_game.snake.direction = (0, 1)
+				self.snake_game.snake.direction = Vector2(0, 1)
 
 			elif self.snake_game.snake.direction.y == 1:
-				self.snake_game.snake.direction = (1, 0)
+				self.snake_game.snake.direction = Vector2(1, 0)
 
 			elif self.snake_game.snake.direction.y == -1:
-				self.snake_game.snake.direction = (-1, 0)
+				self.snake_game.snake.direction = Vector2(-1, 0)
 
 	def check_termination(self):
 		# exit the game if snake goes outside of the screen
@@ -164,8 +158,9 @@ class Agent:
 			current_state = self.get_state()
 			action = self.epsilon_greedy(current_state, epsilon=0.1)
 			self.update_direction(action)
+
 			reward = moving_away_from_the_fruit_reward
-			if self.snake_game.snake.direction.x * (self.snake_game.fruit.position.x - self.snake_game.snake.body[0].x) + self.snake_game.snake.direction.y * (self.snake_game.fruit.position.y - self.snake_game.snake.body[0].y) > 0:
+			if Vector2.dot(self.snake_game.snake.direction, self.snake_game.fruit.position - self.snake_game.snake.body[0]) > 0:
 				reward = moving_towards_the_fruit_reward
 			else:
 				reward = moving_away_from_the_fruit_reward
@@ -182,19 +177,19 @@ class Agent:
 			self.snake_game.check_collision()
 			
 			error = reward + gamma * np.max(self.action_value_function[next_state, :]) - self.action_value_function[current_state, action]
-			action_value_function[current_state, action] += alpha * error
+			self.action_value_function[current_state, action] += alpha * error
 
 			if self.check_termination() == True:
 				break
 
 			# color the screen RGB = (175, 210, 70)
-			self.screen.fill(self.settings.screen_color)
-			self.draw_elements()
+			self.snake_game.screen.fill(self.snake_game.settings.screen_color)
+			self.snake_game.draw_elements()
 
 			# update the screen
 			pygame.display.update()
 
-			self.clock.tick(60)  # set the maximum fps = 60
+			self.snake_game.clock.tick(60)  # set the maximum fps = 60
 
 if __name__ == '__main__':
 	agent = Agent()
