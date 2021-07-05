@@ -151,10 +151,10 @@ class Agent:
         pygame.time.set_timer(SCREEN_UPDATE, 150)
 
         # Reward Scheme
-        # Snake moves towards the fruit : -1
-        # Snake moves away from the fruit : +1
+        # Snake moves towards the fruit : +5
+        # Snake moves away from the fruit : -5
         # Snake eats the fruit : +500
-        # Snake crashes : -500
+        # Snake crashes : -1000
         moving_towards_the_fruit_reward = +5
         moving_away_from_the_fruit_reward = -5
         eating_the_fruit_reward = +500
