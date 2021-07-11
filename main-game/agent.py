@@ -288,6 +288,81 @@ class Agent:
 
         return score
 
+    def current_policy(self, state, action_value_function, epsilon, actions):
+        policy = np.ones((1, actions)) * epsilon / actions
+        greedy_action = np.random.choice(np.flatnonzero(action_value_function[state, :] == action_value_function[state, :].max()))
+        policy[0, greedy_action] += 1 - epsilon
+
+        return policy
+
+    def expected_sarsa_episode(self, gamma=0.9, epsilon=0.01, alpha=0.05):
+        # create a time based user event to move the snake and to check for collisions
+        SCREEN_UPDATE = pygame.USEREVENT
+        # this event is triggered every 150ms
+        pygame.time.set_timer(SCREEN_UPDATE, 150)
+
+        # Reward Scheme
+        # Snake moves towards the fruit : +5
+        # Snake moves away from the fruit : -5
+        # Snake eats the fruit : +500
+        # Snake crashes : -1000
+        moving_towards_the_fruit_reward = +5
+        moving_away_from_the_fruit_reward = -5
+        eating_the_fruit_reward = +500
+        crashing_reward = -1000
+
+        while True:
+            current_state = self.get_state()
+            current_action = self.epsilon_greedy(self.action_value_function, current_state, epsilon=epsilon)
+            self.update_direction(current_action)
+
+            reward = moving_away_from_the_fruit_reward
+
+            old_head_fruit_distance = Vector2.magnitude(
+                self.snake_game.snake.body[0] - self.snake_game.fruit.position)
+            # if Vector2.dot(self.snake_game.snake.direction, self.snake_game.fruit.position - self.snake_game.snake.body[0]) > 0:
+            #   reward = moving_towards_the_fruit_reward
+            # else:
+            #   reward = moving_away_from_the_fruit_reward
+
+            if self.snake_game.snake.new_block == True:
+                reward = eating_the_fruit_reward
+
+            self.snake_game.snake.move_snake()
+            next_state = self.get_state()
+
+            new_head_fruit_distance = Vector2.magnitude(
+                self.snake_game.snake.body[0] - self.snake_game.fruit.position)
+            if new_head_fruit_distance < old_head_fruit_distance:
+                reward = moving_towards_the_fruit_reward
+
+            self.snake_game.check_collision()
+
+            if self.check_termination() == True:
+                reward = crashing_reward
+
+            error = reward + gamma * np.sum(self.current_policy(next_state, self.action_value_function, epsilon, self.actions) * self.action_value_function[next_state, :]) - self.action_value_function[current_state, current_action] 
+            self.action_value_function[current_state, current_action] += alpha * error
+
+            if self.check_termination() == True:
+                break
+
+            # color the screen RGB = (175, 210, 70)
+            self.snake_game.screen.fill(self.snake_game.settings.screen_color)
+            self.snake_game.draw_elements()
+
+            # update the screen
+            pygame.display.update()
+
+            self.snake_game.clock.tick(480)  # set the maximum fps = 60
+
+        score = len(self.snake_game.snake.body) - 3
+
+        self.snake_game.snake.reset()
+        self.snake_game.fruit.randomize()
+
+        return score
+
 
     def play(self, action_value_function):
         while True:
@@ -370,9 +445,33 @@ if __name__ == '__main__':
             plt.xlabel('Episode')
             plt.ylabel('Score')  
 
+    if args.algorithm == "expected-sarsa" or args.algorithm == "compare":
+        expected_sarsa_agent = Agent()
+        expected_sarsa_action_value_function_record = []
+        expected_sarsa_action_value_function_record.append(np.zeros(expected_sarsa_agent.action_value_function.shape))
+
+        for episode in range(args.episodes):
+            epsilon = 0.01 / len(expected_sarsa_action_value_function_record)
+            alpha = 0.5 / len(expected_sarsa_action_value_function_record)
+            expected_sarsa_score = expected_sarsa_agent.sarsa_episode(gamma=0.9, epsilon=epsilon, alpha=alpha)
+            expected_sarsa_progress.append(expected_sarsa_score)
+
+            new_action_value_function = np.copy(expected_sarsa_agent.action_value_function)
+            expected_sarsa_action_value_function_record.append(new_action_value_function)
+            print(len(expected_sarsa_action_value_function_record) - 1, " ", expected_sarsa_score)          
+
+        print("-" * 90)
+
+        if not args.algorithm == "compare":
+            plt.plot(expected_sarsa_progress)
+            plt.xlabel('Episode')
+            plt.ylabel('Score')  
+
+
     if args.algorithm == "compare":
         plt.plot(q_learning_progress, label='Q-Learning')
         plt.plot(sarsa_progress, label='SARSA(0)')
+        plt.plot(expected_sarsa_progress, label='Expected-SARSA')
         plt.legend()
         plt.xlabel('Episode')
         plt.ylabel('Score')
