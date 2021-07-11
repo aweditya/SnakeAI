@@ -373,6 +373,7 @@ if __name__ == '__main__':
     if args.algorithm == "compare":
         plt.plot(q_learning_progress, label='Q-Learning')
         plt.plot(sarsa_progress, label='SARSA(0)')
+        plt.legend()
         plt.xlabel('Episode')
         plt.ylabel('Score')
 
