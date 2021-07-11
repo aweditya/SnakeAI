@@ -38,6 +38,9 @@ I have used a fairly simple reward scheme that can be optimized to improve the p
 * Reward of -5 if the snake moves away from the fruit
 * Reward of +500 for eating the fruit
 * Reward of -1000 for crashing  
+
+### Hyperparameters
+The starting learning rate and &epsilon; parameter for an &epsilon;-greedy policy are 0.5 and 0.01. Without decaying these hyperparameters, the training behaviour of the agent is extremely erratic. With annealing, the performance is more consistent. The agent has achieved a maximum score of 64. 
 ___
 
 ## Resources
