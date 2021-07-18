@@ -10,12 +10,15 @@ I am playing the game. (fairly well if I say so myself)
 ## Assignment 1 - Maze Solver using Value Iteration
 In this assignment, we had to implement a maze solver using Value Iteration. The program runs quickly on almost all grid sizes except the 10x10 one. I plan on writing an alternative program that uses a dictionary-based approach rather than vectorized matrix computations.
 
-Details of the assignment can be found [here](maze-solver/README.md)
+Details of the assignment can be found [here](maze-solver/README.md).
 
 ## Assignment 2 - Sutton & Barto's Windy Gridworld using Model-free control
 In this assignment, we solve the Windy Gridworld problem using different Model-free approaches - SARSA(0), Q-Learning, Expected-SARSA, Dyna-Q. Dyna-Q proves to be the best, outperforming all the other algorithms while Q-Learning and Expected-SARSA have similar performances. I plan on adding an implemention of SARSA(&lambda;) and comparing it with other approaches listed above.  
+
+Details of the assignment can be found [here](windy-gridworld/README.md).
+
 [Sutton & Barto](https://www.andrew.cmu.edu/course/10-703/textbook/BartoSutton.pdf)  
-[Link to the Assignment 2](https://www.cse.iitb.ac.in/~shivaram/teaching/old/cs747-a2020/pa-2/programming-assignment-3.html)
+
 
 ## Simple Tabular RL Agent
 I have added a simple Tabular RL agent to play the Snake Game. The game has an extremely large state space representation and we must use a reduced representation to make the task feasible.
