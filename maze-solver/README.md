@@ -1,7 +1,7 @@
 # Maze Solver
 This assignment was a part of the course _CS747: Foundations of Intelligent and Learning Agents_ offered at IIT Bombay.
 
-The task was to write code to compute an optimal policy for a given MDP using **Value Iteration, Policy Iteration and Linear Programming**. So far, I have only added the implemention of Value Iteration and plan on adding code for Policy Iteration and Linear Programming in the future.
+The task was to write code to compute an optimal policy for a given MDP using **Value Iteration, Policy Iteration and Linear Programming**. So far, I have only added the implementation of Value Iteration and plan on adding code for Policy Iteration and Linear Programming in the future.
 
 Having implemented the algorithms, we used the solver to find the shortest path in a maze.
 
@@ -48,3 +48,5 @@ python visualize.py gridfile pathfile
 ```
 
 [Reference to Original Assignment](https://www.cse.iitb.ac.in/~shivaram/teaching/old/cs747-a2020/pa-2/programming-assignment-2.html)
+
+__Update__: I have added code for _Howard's Policy Iteration_ and _Linear Programming_. I did not implement my own LP solver but used the python package [__PuLP__](https://coin-or.github.io/pulp/). 
