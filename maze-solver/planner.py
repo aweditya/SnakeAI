@@ -13,13 +13,21 @@ class Plan:
         self.gamma = 0.9
         self.start = 0
         self.end = []
-        self.state_transition_probabilities = np.zeros(
-            (self.states, self.actions, self.states))
-        self.expected_reward = np.zeros((self.states, self.actions))
+        self.state_transition_probabilities = np.zeros((self.states, self.actions, self.states)) # p(s'|s,a)
+        self.expected_reward = np.zeros((self.states, self.actions)) # r(s,a)
 
         self.process_input(mdp)
-        if algorithm == "vi":
-            self.value_iteration()
+        if algorithm == "hpi":
+            state_value_function, optimal_policy = self.howard_policy_iteration()
+            self.print_result(state_value_function, optimal_policy)
+
+        elif algorithm == "vi":
+            state_value_function, optimal_policy = self.value_iteration()
+            self.print_result(state_value_function, optimal_policy)
+
+        elif algorithm == "lp":
+            state_value_function, optimal_policy = self.linear_programming()
+            self.print_result(state_value_function, optimal_policy)
 
     def process_input(self, mdp):
         data = open(mdp, 'r')
@@ -40,42 +48,62 @@ class Plan:
                 final_state = int(elements[3])
                 reward = float(elements[4])
                 probability = float(elements[5])
-                self.state_transition_probabilities[initial_state][action][
-                    final_state] += probability
-                self.expected_reward[initial_state][
-                    action] += probability * reward
+                self.state_transition_probabilities[initial_state][action][final_state] += probability
+                self.expected_reward[initial_state][action] += probability * reward
             elif elements[0] == "discount":
                 self.gamma = float(elements[2])
 
-    def value_iteration(self):
-        self.state_value_function = np.zeros((self.states, 1, 1))
-        self.optimal_policy = np.zeros((self.states, 1, 1))
+    def howard_policy_iteration(self):
+        state_value_function = np.zeros(self.states)
+        optimal_policy = np.zeros(self.states, dtype=int)
 
-        theta = 1e-28
+        while True:
+            # policy evaluation
+            A = np.eye(self.states) - self.gamma * self.state_transition_probabilities[np.arange(self.states), optimal_policy, :]
+            b = self.expected_reward[np.arange(self.states), optimal_policy]
+            state_value_function = np.linalg.solve(A, b)
+
+            # policy improvement
+            current_best_policy = np.argmax(self.expected_reward + self.gamma * self.state_transition_probabilities @ state_value_function, axis=1)
+            if np.array_equal(current_best_policy, optimal_policy):
+                optimal_policy = current_best_policy
+                break
+            else:
+                optimal_policy = current_best_policy
+
+        return state_value_function, optimal_policy            
+
+    def value_iteration(self):
+        state_value_function = np.zeros((self.states, 1, 1))
+        optimal_policy = np.zeros((self.states, 1, 1))
+
+        theta = 1e-11
         delta = 1
         while delta > theta:
-            old_state_value_function = self.state_value_function
-            self.state_value_function = np.max(
+            old_state_value_function = state_value_function
+            state_value_function = np.max(
                 self.expected_reward +
                 self.gamma * np.sum(self.state_transition_probabilities *
-                                    self.state_value_function,
+                                    state_value_function,
                                     axis=2),
                 axis=1)
             error = np.sum(
                 np.linalg.norm(old_state_value_function -
-                               self.state_value_function))
+                               state_value_function))
             delta = min(error, delta)
 
-        self.optimal_policy = np.argmax(
+        optimal_policy = np.argmax(
             self.expected_reward +
             self.gamma * np.sum(self.state_transition_probabilities *
-                                self.state_value_function,
+                                state_value_function,
                                 axis=2),
             axis=1)
 
-    def print_result(self):
+        return state_value_function, optimal_policy
+
+    def print_result(self, state_value_function, optimal_policy):
         for state in range(self.states):
-            print(self.state_value_function[state], self.optimal_policy[state])
+            print(state_value_function[state], optimal_policy[state])
 
 
 if __name__ == "__main__":
@@ -89,4 +117,3 @@ if __name__ == "__main__":
         sys.exit(0)
 
     algo = Plan(args.mdp, args.algorithm)
-    algo.print_result()
