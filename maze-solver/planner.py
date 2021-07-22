@@ -77,27 +77,15 @@ class Plan:
         state_value_function = np.zeros((self.states, 1, 1))
         optimal_policy = np.zeros((self.states, 1, 1))
 
-        theta = 1e-11
-        delta = 1
-        while delta > theta:
+        while True:
             old_state_value_function = state_value_function
-            state_value_function = np.max(
-                self.expected_reward +
-                self.gamma * np.sum(self.state_transition_probabilities *
-                                    state_value_function,
-                                    axis=2),
-                axis=1)
-            error = np.sum(
-                np.linalg.norm(old_state_value_function -
-                               state_value_function))
-            delta = min(error, delta)
+            state_value_function = np.max(self.expected_reward + self.gamma * np.sum(self.state_transition_probabilities * state_value_function, axis=2), axis=1)
+            error = np.sum(np.linalg.norm(old_state_value_function - state_value_function))
 
-        optimal_policy = np.argmax(
-            self.expected_reward +
-            self.gamma * np.sum(self.state_transition_probabilities *
-                                state_value_function,
-                                axis=2),
-            axis=1)
+            if np.allclose(old_state_value_function, state_value_function, rtol=1e-11, atol=1e-08):
+                break
+
+        optimal_policy = np.argmax(self.expected_reward + self.gamma * np.sum(self.state_transition_probabilities *state_value_function, axis=2), axis=1)
 
         return state_value_function, optimal_policy
 
