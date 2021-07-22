@@ -2,6 +2,7 @@
 import argparse
 import sys
 import numpy as np
+from pulp import *
 
 parser = argparse.ArgumentParser()
 
@@ -85,9 +86,41 @@ class Plan:
             if np.allclose(old_state_value_function, state_value_function, rtol=1e-11, atol=1e-08):
                 break
 
-        optimal_policy = np.argmax(self.expected_reward + self.gamma * np.sum(self.state_transition_probabilities *state_value_function, axis=2), axis=1)
+        optimal_policy = np.argmax(self.expected_reward + self.gamma * np.sum(self.state_transition_probabilities * state_value_function, axis=2), axis=1)
 
         return state_value_function, optimal_policy
+
+    def linear_programming(self):
+        state_value_function = np.zeros(self.states)
+
+        # Define the LP problem in PuLP to maximize -sum(V(s)) or minimize sum(V(s))
+        prob = LpProblem("Bellman Optimality", LpMinimize)
+
+        lpVariables = []
+        for i in range(self.states):
+            variable = LpVariable(f"V_{i}")
+            lpVariables.append(variable)
+
+        # Add the function to be maximised or minimised
+        prob += sum(lpVariables)
+
+        # Add the nk constraints where n is the number of states and k is the number of actions
+        for i in range(self.states):
+            for j in range(self.actions):
+                constraint = self.expected_reward[i][j]
+                for k in range(self.states):
+                    constraint += self.gamma * self.state_transition_probabilities[i][j][k] * lpVariables[k]
+
+                prob += lpVariables[i] >= constraint
+
+        prob.solve(PULP_CBC_CMD(msg=0))
+
+        for i in range(self.states):
+            state_value_function[i] = lpVariables[i].varValue
+
+        optimal_policy = np.argmax(self.expected_reward + self.gamma * np.sum(self.state_transition_probabilities * state_value_function, axis=2), axis=1)
+
+        return state_value_function, optimal_policy        
 
     def print_result(self, state_value_function, optimal_policy):
         for state in range(self.states):
